@@ -1,7 +1,6 @@
 ﻿using DataTier;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model;
-using Moq;
 using WebServices.Controllers;
 
 namespace Test
@@ -9,34 +8,40 @@ namespace Test
     [TestClass]
     public class UserTest
     {
+        private readonly IUserRepository _repository;
+        private readonly UserController _controller;
+
+        public UserTest()
+        {
+            _repository = new MockUserRepository();
+            _controller = new UserController(_repository);
+        }
+
         [TestMethod]
         public void GetReturnsAllUsers()
         {
-            // Arrange
-            var mockUserRepository = new Mock<IUserRepository>();
-            var userController = new UserController(mockUserRepository.Object);
+            //act
+            var users = _controller.Get();
 
-            // Act
-            var users = userController.Get();
-
-            // Assert
+            //assert
             Assert.IsNotNull(users);
         }
 
         [TestMethod]
         public void GetReturnsUserWithSameId()
         {
-            // Arrange
-            var mockUserRepository = new Mock<IUserRepository>();
-            mockUserRepository.Setup(x => x.GetUser(1)).Returns(new User { Id = 1 });
-            var userController = new UserController(mockUserRepository.Object);
+            //act
+            var user = _controller.Get(1);
 
-            // Act
-            var user = userController.Get(1);
-
-            // Assert
+            //assert
             Assert.IsNotNull(user);
-            Assert.AreEqual(1, user.Id);
+            Assert.AreEqual(GetUser().Id, user.Id);
+        }
+
+        private User GetUser()
+        {
+            var user = new User { Id = 1, FirstName = "Bruce", LastName = "Banner" };
+            return user;
         }
     }
 }
