@@ -14,7 +14,7 @@ WebServices Project:
  - Hosts API over: http://localhost:58829
  - http://localhost:58829/api/user
 
-ConsoleApp Prooject:
+ConsoleApp Project:
  - Client app used to call services
 
 WebSite Project:
