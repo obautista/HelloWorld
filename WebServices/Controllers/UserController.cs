@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Model;
 using DataTier;
 using Microsoft.AspNetCore.Mvc;
-using Model;
+using System.Collections.Generic;
 
 namespace WebServices.Controllers
 {
@@ -16,39 +16,61 @@ namespace WebServices.Controllers
             _userRepository = userRepository;
         }
 
-        // GET: api/User
+        // GET api/user
         [HttpGet]
-        public IEnumerable<User> Get()
+        public ActionResult<IEnumerable<User>> Get()
         {
-            return _userRepository.GetAllUsers();
+            var users = _userRepository.GetAllUsers();
+
+            if(users == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(users);
         }
 
-        // GET: api/User/5
+        // GET api/user/1
         [HttpGet("{id}", Name = "Get")]
-        public User Get(int id)
+        public ActionResult<User> Get(int id)
         {
-            return _userRepository.GetUser(id);
+            var user = _userRepository.GetUserById(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
         }
 
-        // POST: api/User
+        // POST api/user
         [HttpPost]
-        public User Post([FromBody] User user)
+        public ActionResult Post([FromBody] User user)
         {
-            return _userRepository.Add(user);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var addedUser = _userRepository.Add(user);
+            return CreatedAtAction("Get", new { id = addedUser.Id }, addedUser);
         }
 
-        // PUT: api/User/5
-        [HttpPut]
-        public User Put([FromBody] User user)
-        {
-            return _userRepository.Update(user);
-        }
-
-        // DELETE: api/User/5
+        // DELETE api/user/1
         [HttpDelete("{id}")]
-        public User Delete(int id)
+        public ActionResult Remove(int id)
         {
-            return _userRepository.Delete(id);
+            var existingItem = _userRepository.GetUserById(id);
+
+            if (existingItem == null)
+            {
+                return NotFound();
+            }
+
+            _userRepository.Remove(id);
+
+            return Ok();
         }
     }
 }

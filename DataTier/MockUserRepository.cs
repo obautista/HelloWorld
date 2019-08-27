@@ -1,6 +1,6 @@
 ﻿using Model;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace DataTier
 {
@@ -13,7 +13,8 @@ namespace DataTier
             _users = new List<User>()
             {
                 new User() { Id = 1, FirstName = "Clark", LastName = "Kent" },
-                new User() { Id = 2, FirstName = "Peter", LastName = "Parker" }
+                new User() { Id = 2, FirstName = "Peter", LastName = "Parker" },
+                new User() { Id = 3, FirstName = "Tony", LastName = "Stark" }
             };
         }
 
@@ -24,7 +25,7 @@ namespace DataTier
             return user;
         }
 
-        public User Delete(int id)
+        public User Remove(int id)
         {
             var user = _users.FirstOrDefault(u => u.Id == id);
             if(user != null)
@@ -39,7 +40,7 @@ namespace DataTier
             return _users;
         }
 
-        public User GetUser(int id)
+        public User GetUserById(int id)
         {
             return _users.FirstOrDefault(u => u.Id == id);
         }

@@ -20,7 +20,7 @@ ConsoleApp Project .NET Core 2.1
 WebSite Project .NET Core 2.1, Angular 5
  - Client app using Angular to call services
 
-MSTest Project .NET Core 2.1
+XUnitTest Project .NET Core 2.1
  - Unit tests to retrieve all Users and user with same Id
 
 Solution start up projects: WebServices and ConsoleApp
